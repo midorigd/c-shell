@@ -111,13 +111,13 @@ int launch_cmd(char** args) {
 
         // exec returns if error has occurred
         if (exec_stat == -1) {
-            perror("shell: execvp error");
+            perror("csh: execvp error");
             exit(EXIT_FAILURE);
         }
 
     // fork returns -1 if error has occurred
     } else if (pid < 0) {
-        perror("shell: fork error");
+        perror("csh: fork error");
 
     // parent process gets returned child's pid
     } else {

@@ -6,6 +6,6 @@
 *.log
 *.dSYM/
 
-main
+csh
 
 .DS_Store

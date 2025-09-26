@@ -24,7 +24,7 @@ int builtin_cd(char** args) {
 
     int status = chdir(args[1]);
     if (status) {
-        perror("shell: cd error");
+        perror("csh: cd error");
     }
     return 1;
 }

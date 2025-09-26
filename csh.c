@@ -10,14 +10,14 @@
  * c printf with ANSI colors
  */
 
-void shell_loop(void);
+void csh_loop(void);
 
 
 int main(int argc, char** argv) {
     // INITIALIZE: load configs
 
     // INTERPRET: run main loop
-    shell_loop();
+    csh_loop();
 
     // TERMINATE: free resources, shut down
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 }
 
 
-void shell_loop(void) {
+void csh_loop(void) {
     char* cmd;
     char** args;
     int status;
