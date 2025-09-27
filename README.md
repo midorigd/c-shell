@@ -4,7 +4,7 @@ This is a custom implementation of a UNIX shell in C.
 
 The fundamentals of this project are based on Stephen Brennan's "Write a Shell in C" tutorial. The shell is currently in a very basic stage, but I hope to expand on it and add many more features over time.
 
-## Current Features
+## Current features
 
 In addition to program calls, the shell supports the following built-in commands:
 
@@ -14,7 +14,7 @@ help
 exit
 ```
 
-## Coming Soon
+## Coming soon
 
 I'm planning to add these features next:
 
@@ -25,6 +25,24 @@ I'm planning to add these features next:
   - Display current working directory in prompt
   - ANSI color formatted messages
 - Pipelining
+
+## Building the project
+
+Run the following from the terminal:
+
+```zsh
+git clone https://github.com/midorigd/c-shell
+
+clang -g *.c -o csh
+```
+
+## Running the project
+
+Run the following from the project directory:
+
+```zsh
+./csh
+```
 
 ## References
 
