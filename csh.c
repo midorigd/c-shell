@@ -38,6 +38,12 @@ void csh_loop(void) {
         status = execute_cmd(args);
 
         free(cmd);
+
+        size_t i = 0;
+        while (args[i] != NULL) {
+            free(args[i]);
+            ++i;
+        }
         free(args);
 
     } while (status);
