@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,11 +7,54 @@
 #include "read.h"
 #include "builtin.h"
 
+enum ReadMode {
+    DEFAULT,
+    SINGLE_QUOTE,
+    DOUBLE_QUOTE
+};
+
+/*
+    Reallocates memory for and resizes a string buffer to the buffer_size.
+*/
+char* resize_str_buffer(char* buffer, size_t buffer_size) {
+    char* new_buffer = realloc(buffer, buffer_size);
+
+    if (!new_buffer) {
+        fprintf(stderr, "String buffer reallocation failed\n");
+        free(buffer);
+        exit(EXIT_FAILURE);
+    }
+
+    return new_buffer;
+}
+
+/*
+    Reallocates memory for and resizes a token buffer to the buffer_size.
+*/
+char** resize_token_buffer(char** buffer, size_t buffer_size) {
+    char** new_buffer = realloc(buffer, buffer_size);
+
+    if (!new_buffer) {
+        fprintf(stderr, "Token buffer reallocation failed\n");
+
+        // strtok modifies in-place, so *buffer points to the original string
+        free(*buffer);
+        free(buffer);
+
+        exit(EXIT_FAILURE);
+    }
+
+    return new_buffer;
+}
+
+/*
+    Reads chars from input into a dynamic buffer until a newline or null-terminator is reached.
+*/
 char* read_cmd(void) {
     size_t buffer_size = 128;
     char* line = malloc(buffer_size);
 
-    if (line == NULL) {
+    if (!line) {
         fprintf(stderr, "Line allocation failed\n");
         exit(EXIT_FAILURE);
     }
@@ -29,71 +73,58 @@ char* read_cmd(void) {
         }
 
         line[i] = chr;
+        ++i;
 
         // reallocate if block is at capacity
-        if (++i >= buffer_size) {
+        if (i >= buffer_size) {
 
             // doubling strategy used for amortized constant dsa whatever
             buffer_size *= 2;
-            char* new_line = realloc(line, buffer_size);
-
-            if (new_line == NULL) {
-                fprintf(stderr, "Line reallocation failed\n");
-                free(line);
-                exit(EXIT_FAILURE);
-            }
-
-            line = new_line;
+            line = resize_str_buffer(line, buffer_size);
         }
     }
 }
 
+/*
+    Tokenizes a command into its respective arguments, splitting by whitespace.
+*/
 char** split_cmd(char* command) {
     size_t buffer_size = 8;
-    char** args = malloc(buffer_size); // model args as null-terminated array of strings
+    char** tokens = malloc(buffer_size); // model args as null-terminated array of strings
 
-    if (args == NULL) {
+    if (!tokens) {
         fprintf(stderr, "Argument allocation failed\n");
         exit(EXIT_FAILURE);
     }
 
+    int readMode = DEFAULT;
+
     // split by space, escape sequences and string literals not currently supported
     size_t i = 0;
     const char* delim = " ";
-    char* arg = strtok(command, delim);
+    char* token = strtok(command, delim);
 
     do {
-        args[i] = arg;
+        tokens[i] = token;
+        ++i;
 
         // resize using doubling strategy
-        if (++i >= buffer_size) {
+        if (i >= buffer_size) {
             buffer_size *= 2;
-            char** new_args = realloc(args, buffer_size);
-
-            if (new_args == NULL) {
-                fprintf(stderr, "Argument reallocation failed\n");
-
-                // strtok modifies in-place, so *args points to the original string
-                free(*args);
-                free(args);
-
-                exit(EXIT_FAILURE);
-            }
-
-            args = new_args;
+            tokens = resize_token_buffer(tokens, buffer_size);
         }
 
-        arg = strtok(NULL, delim);
+        token = strtok(NULL, delim);
 
-    } while (arg != NULL);
+    } while (token != NULL);
 
-    args[i] = NULL;
-    return args;
+    tokens[i] = NULL;
+    return tokens;
 }
 
 int execute_cmd(char** args) {
     for (size_t i = 0; builtin_names[i] != NULL; ++i) {
-        if (!strcmp(*args, builtin_names[i])) {
+        if (strcmp(*args, builtin_names[i]) == 0) {
             return (*builtin_func[i])(args);
         }
     }
