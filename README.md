@@ -2,9 +2,16 @@
 
 This is a custom implementation of a UNIX shell in C.
 
-The fundamentals of this project are based on Stephen Brennan's "Write a Shell in C" tutorial. The shell is currently in a very basic stage, but I hope to expand on it and add many more features over time.
+The fundamentals of this project are based on Stephen Brennan's "Write a Shell in C" tutorial. The shell is currently in a fairly basic stage, but I hope to expand on it and add many more features over time.
 
 ## Current features
+
+10.11.25: The shell now supports advanced parsing, such as escape sequences and quoted literals. This includes:
+
+- Escaping spaces to treat multiple words as a single token
+- Common escape-sequences characters like `\n`, `\t`
+- Single-quoted strings are interpreted literally
+- Double-quoted strings support escape sequences
 
 In addition to program calls, the shell supports the following built-in commands:
 
@@ -18,7 +25,6 @@ exit
 
 I'm planning to add these features next:
 
-- Support for escape sequences and string literals in arguments
 - More builtins (pwd)
 - Configuration files
 - UX improvements
@@ -33,8 +39,12 @@ Run the following from the terminal:
 ```zsh
 git clone https://github.com/midorigd/c-shell
 
-clang -g *.c -o csh
+clang [-DDEBUG_MODE] -g *.c -o csh
 ```
+
+### Flags
+
+`-DDEBUG_MODE`: Enables debug mode, prints tokens as they are parsed and built
 
 ## Running the project
 

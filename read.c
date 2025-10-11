@@ -6,10 +6,8 @@
 
 #include "read.h"
 #include "builtin.h"
-#include "utils.h"
-
-#define DEBUG_MODE
 #include "debug.h"
+#include "utils.h"
 
 static const size_t INIT_CMD_SIZE = 128;
 static const size_t INIT_TOK_SIZE = 8;
