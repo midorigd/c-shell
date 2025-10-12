@@ -39,7 +39,7 @@ Run the following from the terminal:
 ```zsh
 git clone https://github.com/midorigd/c-shell
 
-clang [-DDEBUG_MODE] -g *.c -o csh
+make [OPT_CFLAGS=-DDEBUG_MODE] clean
 ```
 
 ### Flags

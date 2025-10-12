@@ -10,21 +10,6 @@
  * c printf with ANSI colors
  */
 
-void csh_loop(void);
-
-
-int main(int argc, char** argv) {
-    // INITIALIZE: load configs
-
-    // INTERPRET: run main loop
-    csh_loop();
-
-    // TERMINATE: free resources, shut down
-
-    return EXIT_SUCCESS;
-}
-
-
 void csh_loop(void) {
     char* cmd;
     char** args;
